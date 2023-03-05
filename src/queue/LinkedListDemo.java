@@ -19,7 +19,9 @@ public class LinkedListDemo {
 //        linkedList.delete(1);
 //        linkedList.list();
         System.out.println("-----------------");
-        System.out.println(linkedList.listEndK(5));
+//        System.out.println(linkedList.listEndK(5));
+        linkedList.reverse();
+        linkedList.list();
     }
 }
 
@@ -138,6 +140,28 @@ class LinkedList {
             second = second.next;
         }
         return second;
+    }
+
+
+    /***
+     * 链表反转,头插法，遍历链表每个元素，插到头节点后面
+     */
+    public void reverse() {
+        //先定义一个节点
+        Hero revHead = new Hero(0, "", "");
+        Hero temp = head;
+        while (temp.next != null) {
+            //先保存一下当前节点
+            Hero curent = temp.next;
+            // ******* 需要将当前节点断下来，否则将curent的节点指向revHead.next（null），会导致后面的temp也都为null
+            head.next = temp.next.next;
+            //插入到头节点后面
+            curent.next = revHead.next;
+            revHead.next = curent;
+            //将temp移动到头节点
+            temp=head;
+        }
+        head.next = revHead.next;
     }
 }
 
