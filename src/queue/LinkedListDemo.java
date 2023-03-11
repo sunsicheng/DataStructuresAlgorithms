@@ -2,26 +2,33 @@ package queue;
 
 public class LinkedListDemo {
     public static void main(String[] args) {
-        LinkedList linkedList = new LinkedList();
-        linkedList.add(new Hero(1, "张三", "江西"));
-        linkedList.add(new Hero(3, "里斯", "江西"));
-        linkedList.add(new Hero(4, "周结论", "江西"));
-        linkedList.add(new Hero(2, "赵六", "江西"));
-        linkedList.add(new Hero(7, "林俊杰", "江西"));
-        linkedList.add(new Hero(6, "高启强", "江西"));
-        linkedList.add(new Hero(8, "高启盛", "江西"));
-        linkedList.add(new Hero(5, "泰叔", "江西"));
-        linkedList.list();
+        LinkedList linkedList1 = new LinkedList();
+        LinkedList linkedList2 = new LinkedList();
+        linkedList1.add(new Hero(1, "张三", "江西"));
+        linkedList1.add(new Hero(3, "里斯", "江西"));
+        linkedList1.add(new Hero(4, "周结论", "江西"));
+        linkedList1.add(new Hero(2, "赵六", "江西"));
+        linkedList2.add(new Hero(7, "林俊杰", "江西"));
+        linkedList2.add(new Hero(6, "高启强", "江西"));
+        linkedList2.add(new Hero(8, "高启盛", "江西"));
+        linkedList2.add(new Hero(5, "泰叔", "江西"));
+        linkedList1.list();
+        System.out.println("--------------------------------------");
+//        linkedList2.list();
+//        System.out.println("--------------------------------------");
 //        linkedList.update(new Hero(4,"王五","北京"));
 //        linkedList.list();
 //        linkedList.delete(3);
 //        linkedList.delete(4);
 //        linkedList.delete(1);
 //        linkedList.list();
-        System.out.println("-----------------");
+//        System.out.println("-----------------");
 //        System.out.println(linkedList.listEndK(5));
-        linkedList.reverse();
-        linkedList.list();
+//        linkedList1.combine(linkedList2);
+//        linkedList1.list();
+        Hero reverse = linkedList1.reverse2();
+        System.out.println(reverse);
+        //linkedList1.list();
     }
 }
 
@@ -163,7 +170,63 @@ class LinkedList {
         }
         head.next = revHead.next;
     }
+
+    public LinkedList combine(LinkedList list) {
+
+        //如果两个都是空链表，直接返回空链表
+        if (head.next == null && list.head.next == null) {
+            return this;
+        } else if (head.next == null && list.head.next != null) {   //有一个空链表返回不为空的那个
+            return list;
+        } else if (head.next != null && list.head.next == null) {   //有一个空链表返回不为空的那个
+            return this;
+        } else {            //两个都不为空的情况
+            Hero listHead = list.head;
+            while (true) {      //遍历一个链表
+                if (listHead.next == null) {        // 链表遍历结束，所有元素插入完毕
+                    break;
+                }
+                //取下头结点下的第一个元素
+                Hero insertNode = listHead.next;
+                listHead.next = listHead.next.next;
+                insertNode.next = null;
+                //遍历源链表，找到待插入元素的位置上
+                Hero temp = head.next;
+                while (true) {
+                    if (temp.next == null) {
+                        break;
+                    }
+
+                    if (insertNode.no < temp.next.no) {
+                        break;
+                    }
+                    temp = temp.next;
+                }
+                //插入节点
+                insertNode.next = temp.next;
+                temp.next = insertNode;
+            }
+            return this;
+        }
+    }
+
+
+    //反转时需要三个指针分别指向前中后三个结点，中间结点的next指向前结点完成中间结点的反转，后指针指向中间结点的原后继，防止链表丢失
+    public Hero reverse2(){
+        Hero pre=null;
+        Hero cur=head;
+        Hero next;
+        while (cur!=null){
+            next=cur.next;      //保存当前节点
+            cur.next=pre;       //当前节点的下一节点指向pre,完成翻转
+            pre=cur;            //指针往后移
+            cur=next;
+        }
+        return pre;
+    }
 }
+
+
 
 
 /**
